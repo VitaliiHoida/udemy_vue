@@ -1,20 +1,28 @@
 import authApi from '@/api/auth';
+import {setItem} from '@/helpers/persistanceStorage';
 
 export default {
     name: "auth",
     namespaced: true,
     state: {
         isSubmit: false,
+        currentUser: null,
+        validationErrors: null,
+        isLoggedIn: null,
     },
     mutations: {
         registerStart(state) {
             state.isSubmit = true;
+            state.validationErrors = null;
         },
-        registerSuccess(state) {
+        registerSuccess(state, payload) {
             state.isSubmit = false;
+            state.currentUser = payload;
+            state.isLoggedIn = true;
         },
-        registerFailure(state) {
+        registerFailure(state, payload) {
             state.isSubmit = false;
+            state.validationErrors = payload;
         },
     },
     actions: {
@@ -23,17 +31,14 @@ export default {
                 context.commit('registerStart');
                 authApi.register(credentials)
                     .then(response => {
-                        console.log('response', response);
                         context.commit('registerSuccess', response.data.user);
-                        resolve(response.data.user);})
+                        setItem('accessToken', response.data.user.token);
+                        resolve(response.data.user);
+                    })
                     .catch(result => {
                         context.commit('registerFailure', result.response.data.errors);
-                        console.log('result errors', result);})
+                    })
             });
-
-            /*setTimeout(()=>{
-                context.commit('registerStart')
-            }, 1000)*/
         },
     },
 };
