@@ -27,16 +27,23 @@
 </template>
 
 <script>
+import { mapActions, mapState, mapMutations } from "vuex";
+
 export default {
   name: 'RegisterView',
   computed: {
+    ...mapState("auth", ["isSubmit"]),
     isSubmitting(){
-      return this.$store.state.auth.isSubmitting;
+      return this.isSubmit;
     }
   },
   methods: {
+    ...mapActions("auth", ["register"]),
+    ...mapMutations("auth", ["registerStart"]),
     onSubmit() {
-      this.$store.commit('registerStart');
+      this.register({email:'', username:'', password:''}).then(user => {
+        console.log('successfully register user', user)
+      });
     },
   }
 }
