@@ -3,22 +3,19 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-xs-12">
-          <h1 class="text-xs-center">Sign Up</h1>
+          <h1 class="text-xs-center">Sign In</h1>
           <p class="text-xs-center">
-            <router-link :to="{name: 'login'}">Have an account?</router-link>
+            <router-link :to="{name: 'register'}">Need an account?</router-link>
           </p>
           <validation-errors :validation-errors="validationError" v-if="validationError"></validation-errors>
           <form @submit.prevent="onSubmit">
-            <fieldset class="form-group">
-              <input type="text" class="form-control form-control-lg" placeholder="Username" v-model="user.username"/>
-            </fieldset>
             <fieldset class="form-group">
               <input type="text" class="form-control form-control-lg" placeholder="Email" v-model="user.email"/>
             </fieldset>
             <fieldset class="form-group">
               <input type="password" class="form-control form-control-lg" placeholder="Password" v-model="user.password"/>
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right" :disabled="isSubmitting">Sign Up</button>
+            <button class="btn btn-lg btn-primary pull-xs-right" :disabled="isSubmitting">Sign In</button>
           </form>
         </div>
       </div>
@@ -39,7 +36,6 @@ export default {
     user: {
       email: '',
       password: '',
-      username: '',
     },
   }),
   computed: {
@@ -52,10 +48,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions("auth", ["register"]),
-    ...mapMutations("auth", ["registerStart"]),
+    ...mapActions("auth", ["login"]),
+    ...mapMutations("auth", ["loginStart"]),
     onSubmit() {
-      this.register({email: this.user.email, username: this.user.username, password: this.user.password}).then(() => {
+      this.login({email: this.user.email, password: this.user.password}).then(() => {
         this.$router.push({name: 'home'});
       });
     },
