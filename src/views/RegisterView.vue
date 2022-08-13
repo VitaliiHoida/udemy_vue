@@ -7,7 +7,7 @@
           <p class="text-xs-center">
             <router-link :to="{name: 'login'}">Have an account?</router-link>
           </p>
-          <validation-errors :validation-errors="validationError" v-if="validationError"></validation-errors>
+          <validation-errors :validation-errors="validationErrors" v-if="validationErrors"></validation-errors>
           <form @submit.prevent="onSubmit">
             <fieldset class="form-group">
               <input type="text" class="form-control form-control-lg" placeholder="Username" v-model="user.username"/>
@@ -18,7 +18,7 @@
             <fieldset class="form-group">
               <input type="password" class="form-control form-control-lg" placeholder="Password" v-model="user.password"/>
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right" :disabled="isSubmitting">Sign Up</button>
+            <button class="btn btn-lg btn-primary pull-xs-right" :disabled="isSubmit">Sign Up</button>
           </form>
         </div>
       </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex";
+import { mapActions, mapState } from "vuex";
 import ValidationErrors from "@/components/ValidationErrors";
 
 export default {
@@ -44,16 +44,10 @@ export default {
   }),
   computed: {
     ...mapState("auth", ["isSubmit", "validationErrors"]),
-    isSubmitting(){
-      return this.isSubmit;
-    },
-    validationError(){
-      return this.validationErrors;
-    }
   },
   methods: {
     ...mapActions("auth", ["register"]),
-    ...mapMutations("auth", ["registerStart"]),
+    // ...mapMutations("auth", ["registerStart"]),
     onSubmit() {
       this.register({email: this.user.email, username: this.user.username, password: this.user.password}).then(() => {
         this.$router.push({name: 'home'});
