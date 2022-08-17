@@ -46,7 +46,7 @@ export default {
     // ...mapMutations("auth", ["loginStart"]),
     onSubmit() {
       this.login({email: this.user.email, password: this.user.password}).then(() => {
-        this.$router.push({name: 'home'});
+        this.$router.push({name: 'globalFeed'});
       });
     },
   }

@@ -50,7 +50,7 @@ export default {
     // ...mapMutations("auth", ["registerStart"]),
     onSubmit() {
       this.register({email: this.user.email, username: this.user.username, password: this.user.password}).then(() => {
-        this.$router.push({name: 'home'});
+        this.$router.push({name: 'globalFeed'});
       });
     },
   }
