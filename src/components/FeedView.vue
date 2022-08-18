@@ -31,22 +31,32 @@
           TAG LIST
         </router-link>
       </div>
-      PAGINATION
+      <app-pagination :total="total" :limit="limit" :current-page="currentPage" :url="url"></app-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import {mapState, mapActions} from "vuex";
+import AppPagination from '@/components/AppPagination';
 
 export default {
   name: 'FeedView',
+  components: {
+    AppPagination,
+  },
   props: {
     apiUrl: {
       type: String,
       required: true,
     },
   },
+  data: () => ({
+    total: 500,
+    limit: 10,
+    currentPage: 5,
+    url: '/tags/dragons',
+  }),
   computed: {
     ...mapState("feed", ["isLoading", "data", "error"]),
   },
