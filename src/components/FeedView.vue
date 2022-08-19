@@ -1,11 +1,7 @@
 <template>
   <div>
-    <div v-if="isLoading">
-      Loading...
-    </div>
-    <div v-if="error">
-      Something bad happened
-    </div>
+    <app-loading v-if="isLoading" />
+    <app-error v-if="error" :message="error"/>
     <div v-if="data">
       <div class="article-preview" v-for="(article, index) in data.articles" :key="index">
         <div class="article-meta">
@@ -41,11 +37,15 @@ import {mapState, mapActions} from "vuex";
 import AppPagination from '@/components/AppPagination';
 import {limit} from '@/helpers/vars';
 import {stringify, parseUrl} from 'query-string';
+import AppLoading from '@/components/Loading';
+import AppError from '@/components/Error';
 
 export default {
   name: 'FeedView',
   components: {
     AppPagination,
+    AppLoading,
+    AppError,
   },
   props: {
     apiUrl: {

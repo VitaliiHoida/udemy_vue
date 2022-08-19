@@ -22,7 +22,7 @@ import AppBanner from '@/components/Banner';
 import FeedToggler from "@/components/FeedToggler";
 
 export default {
-  name: 'GlobalFeed',
+  name: 'YourFeed',
   components: {
     FeedView,
     PopularTags,
@@ -30,7 +30,7 @@ export default {
     FeedToggler,
   },
   data: ()=>({
-    apiUrl: '/articles',
+    apiUrl: '/articles/feed',
   }),
 }
 </script>

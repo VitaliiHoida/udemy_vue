@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import GlobalFeed from '@/views/GlobalFeed.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import LoginView from '@/views/LoginView.vue'
+import YourFeed from '@/views/YourFeed.vue'
+import TagFeed from '@/views/TagFeed.vue'
 
 const routes = [
   {
@@ -22,12 +24,12 @@ const routes = [
   {
     path: '/feed',
     name: 'yourFeed',
-    component: GlobalFeed,
+    component: YourFeed,
   },
   {
     path: '/tags/:slug',
     name: 'tag',
-    component: GlobalFeed,
+    component: TagFeed,
   },
   {
     path: '/articles/new',
