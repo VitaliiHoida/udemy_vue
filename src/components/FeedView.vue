@@ -31,7 +31,7 @@
           TAG LIST
         </router-link>
       </div>
-      <app-pagination :total="total" :limit="limit" :current-page="currentPage" :url="url"></app-pagination>
+      <app-pagination :total="data.articlesCount" :limit="limit" :current-page="curPage" :url="baseUrl"></app-pagination>
     </div>
   </div>
 </template>
@@ -39,6 +39,8 @@
 <script>
 import {mapState, mapActions} from "vuex";
 import AppPagination from '@/components/AppPagination';
+import {limit} from '@/helpers/vars';
+import {stringify, parseUrl} from 'query-string';
 
 export default {
   name: 'FeedView',
@@ -52,19 +54,40 @@ export default {
     },
   },
   data: () => ({
-    total: 500,
-    limit: 10,
-    currentPage: 5,
-    url: '/tags/dragons',
+    limit,
   }),
   computed: {
     ...mapState("feed", ["isLoading", "data", "error"]),
+    curPage() {
+      return Number(this.$route.query.page || '1');
+    },
+    baseUrl (){
+      return this.$route.path;
+    },
+    offset() {
+      return ( (this.curPage * limit) - limit );
+    },
   },
   methods: {
     ...mapActions("feed", ["getFeed"]),
+    fetchFeed(){
+      const parsedUrl = parseUrl(this.apiUrl);
+      const stringifiedParams = stringify({
+        limit,
+        offset: this.offset,
+        ...parsedUrl.query
+      });
+      const apiUrlWithParams = `${parsedUrl.url}?${stringifiedParams}`;
+      this.getFeed({apiUrl: apiUrlWithParams});
+    },
+  },
+  watch: {
+    curPage() {
+      this.fetchFeed();
+    },
   },
   mounted() {
-    this.getFeed({apiUrl: this.apiUrl});
+    this.fetchFeed();
   }
 }
 </script>
