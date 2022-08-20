@@ -13,14 +13,14 @@
             </router-link>
             <span class="date">&nbsp;{{ data.createdAt }}</span>
           </div>
-          <span>
-          <router-link class="btn btn-outline-secondary btn-sm" :to="{name: 'editArticle', params: {slug: data.slug}}">
-            <i class="ion-edit"/> Edit Article
-          </router-link>
-          <button class="btn btn-outline-danger btn-sm">
-            <i class="ion-trash-a"/> Delete Article
-          </button>
-        </span>
+          <span v-if="isAuthor">
+            <router-link class="btn btn-outline-secondary btn-sm" :to="{name: 'editArticle', params: {slug: data.slug}}">
+              <i class="ion-edit"/> Edit Article
+            </router-link>
+            <button class="btn btn-outline-danger btn-sm" @click="delArticle">
+              <i class="ion-trash-a"/> Delete Article
+            </button>
+          </span>
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import {mapState, mapActions} from "vuex";
+import {mapState, mapActions, mapGetters} from "vuex";
 import AppLoading from '@/components/Loading';
 import AppError from '@/components/Error';
 
@@ -51,10 +51,22 @@ export default {
     AppError,
   },
   computed: {
-    ...mapState("article", ["data", "isLoading", "error"])
+    ...mapState("article", ["data", "isLoading", "error"]),
+    ...mapGetters("auth", ["curUser"]),
+    isAuthor() {
+      if (!this.curUser || !this.data) {
+        return false;
+      }
+      return this.data.author.username === this.curUser.username;
+    },
   },
   methods: {
-    ...mapActions("article", ["getArticle"]),
+    ...mapActions("article", ["getArticle", "deleteArticle"]),
+    delArticle() {
+      this.deleteArticle({slug: this.$route.params.slug}).then(() => {
+        this.$router.push({name: 'globalFeed'});
+      });
+    }
   },
   mounted() {
     this.getArticle({slug: this.$route.params.slug});

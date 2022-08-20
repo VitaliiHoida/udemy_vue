@@ -21,6 +21,12 @@ export default {
         getArticleFailure(state) {
             state.isLoading = false;
         },
+        deleteArticleStart() {
+        },
+        deleteArticleSuccess() {
+        },
+        deleteArticleFailure() {
+        },
     },
     actions: {
         getArticle(context, {slug}) {
@@ -33,6 +39,19 @@ export default {
                     })
                     .catch(() => {
                         context.commit('getArticleFailure');
+                    })
+            });
+        },
+        deleteArticle(context, {slug}) {
+            return new Promise(resolve => {
+                context.commit('deleteArticleStart', slug);
+                articleApi.deleteArticle(slug)
+                    .then(() => {
+                        context.commit('deleteArticleSuccess');
+                        resolve();
+                    })
+                    .catch(() => {
+                        context.commit('deleteArticleFailure');
                     })
             });
         },
