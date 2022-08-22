@@ -3,7 +3,7 @@
     <div class="container page">
       <div class="row">
         <div class="col-md-10 offset-md-1 col-xs-12">
-          <app-errors v-if="errors" :message="errors"/>
+          <validation-errors v-if="errors" :validation-errors="errors"/>
           <form @submit.prevent="onSubmit">
             <fieldset>
               <fieldset class="form-group">
@@ -30,15 +30,15 @@
 </template>
 
 <script>
-import AppErrors from '@/components/Error';
+import ValidationErrors from '@/components/ValidationErrors';
 
 export default {
   name: 'ArticleForm',
   components: {
-    AppErrors,
+    ValidationErrors,
   },
   props: {
-    initialValues: {
+    initial: {
       type: Object,
       required: true,
     },
@@ -52,10 +52,10 @@ export default {
     },
   },
   data: () => ({
-    title: '',
-    description: '',
-    body: '',
-    tagList: '',
+    title: this?.initial.title,
+    description: this?.initial.description,
+    body: this?.initial.body,
+    tagList: this?.initial.tagList.join(' '),
   }),
   methods: {
     onSubmit() {
@@ -63,10 +63,18 @@ export default {
         title: this.title,
         description: this.description,
         body: this.body,
-        tagList: this.tagList,
+        tagList: this.tagList?.split(' '),
       };
       this.$emit('articleSubmit', form);
     }
+  },
+  watch: {
+    initial() {
+      this.title = this.initial.title;
+      this.description = this.initial.description;
+      this.body = this.initial.body;
+      this.tagList = this.initial.tagList.join(' ');
+    },
   },
 }
 </script>
