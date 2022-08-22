@@ -32,7 +32,7 @@
           <div>
             <p>{{ data.body }}</p>
           </div>
-          TAGLIST
+          <tag-list :tags="data.tagList"/>
         </div>
       </div>
     </div>
@@ -43,12 +43,14 @@
 import {mapState, mapActions, mapGetters} from "vuex";
 import AppLoading from '@/components/Loading';
 import AppError from '@/components/Error';
+import TagList from "@/components/TagList";
 
 export default {
   name: 'AppArticle',
   components: {
     AppLoading,
     AppError,
+    TagList,
   },
   computed: {
     ...mapState("article", ["data", "isLoading", "error"]),

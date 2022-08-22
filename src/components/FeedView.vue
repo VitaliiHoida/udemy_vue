@@ -24,7 +24,7 @@
           <h1>{{article.title}}</h1>
           <p>{{article.description}}</p>
           <span>Read more...</span>
-          TAG LIST
+          <tag-list :tags="article.tagList" />
         </router-link>
       </div>
       <app-pagination :total="data.articlesCount" :limit="limit" :current-page="curPage" :url="baseUrl"></app-pagination>
@@ -39,6 +39,7 @@ import {limit} from '@/helpers/vars';
 import {stringify, parseUrl} from 'query-string';
 import AppLoading from '@/components/Loading';
 import AppError from '@/components/Error';
+import TagList from "@/components/TagList";
 
 export default {
   name: 'FeedView',
@@ -46,6 +47,7 @@ export default {
     AppPagination,
     AppLoading,
     AppError,
+    TagList,
   },
   props: {
     apiUrl: {
