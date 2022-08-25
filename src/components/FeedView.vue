@@ -17,7 +17,7 @@
             </span>
           </div>
           <div class="pull-xs-right">
-            ADD TO FAVORITES
+            <add-to-favorites :is-favorited="article.favorited" :article-slug="article.slug" :favorites-count="article.favoritesCount" />
           </div>
         </div>
         <router-link :to="{name: 'article', params: {slug: article.slug}}" class="preview-link">
@@ -40,6 +40,7 @@ import {stringify, parseUrl} from 'query-string';
 import AppLoading from '@/components/Loading';
 import AppError from '@/components/Error';
 import TagList from "@/components/TagList";
+import AddToFavorites from "@/components/AddToFavorites";
 
 export default {
   name: 'FeedView',
@@ -48,6 +49,7 @@ export default {
     AppLoading,
     AppError,
     TagList,
+    AddToFavorites,
   },
   props: {
     apiUrl: {
