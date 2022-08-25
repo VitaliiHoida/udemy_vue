@@ -89,6 +89,9 @@ export default {
     curPage() {
       this.fetchFeed();
     },
+    apiUrl() {
+      this.fetchFeed();
+    },
   },
   mounted() {
     this.fetchFeed();
