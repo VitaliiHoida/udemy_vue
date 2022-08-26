@@ -17,7 +17,7 @@
             </span>
           </div>
           <div class="pull-xs-right">
-            <add-to-favorites :is-favorited="article.favorited" :article-slug="article.slug" :favorites-count="article.favoritesCount" />
+            <add-to-favorites :is-favorited="article.favorited" :favorites-count="article.favoritesCount" @addToFavorites="atf(article)"/>
           </div>
         </div>
         <router-link :to="{name: 'article', params: {slug: article.slug}}" class="preview-link">
@@ -74,6 +74,7 @@ export default {
   },
   methods: {
     ...mapActions("feed", ["getFeed"]),
+    ...mapActions("addToFavorites", ["addToFavorites"]),
     fetchFeed(){
       const parsedUrl = parseUrl(this.apiUrl);
       const stringifiedParams = stringify({
@@ -84,6 +85,16 @@ export default {
       const apiUrlWithParams = `${parsedUrl.url}?${stringifiedParams}`;
       this.getFeed({apiUrl: apiUrlWithParams});
     },
+    atf(article){
+      this.addToFavorites({slug: article.slug, isFavorited: article.favorited}).then(()=>{
+        if (article.favorited) {
+          article.favoritesCount = article.favoritesCount - 1;
+        } else {
+          article.favoritesCount = article.favoritesCount + 1;
+        }
+        article.favorited = !article.favorited;
+      });
+    }
   },
   watch: {
     curPage() {

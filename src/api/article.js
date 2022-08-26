@@ -18,9 +18,19 @@ const updateArticle = (slug, articleInput) => {
         .then(response => response.data.article);
 }
 
+const getComments = slug => {
+    return axios.get(`/articles/${slug}/comments`).then(response => response.data.comments);
+}
+
+const delComments = (slug, commentId) => {
+    return axios.delete(`/articles/${slug}/comments/${commentId}`);
+}
+
 export default {
     getArticle,
     deleteArticle,
     createArticle,
     updateArticle,
+    getComments,
+    delComments
 }

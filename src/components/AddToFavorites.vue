@@ -4,18 +4,23 @@
       :class="{
           'btn': true,
           'btn-sm': true,
-          'btn-primary': isFav,
-          'btn-outline-primary': !isFav
+          'btn-primary': isFavorited,
+          'btn-outline-primary': !isFavorited
        }"
   >
     <i class="ion-heart"/>
-    <span>&nbsp; {{ favCount }}</span>
+    <span>&nbsp;
+      <span v-if="detailed">
+        <span v-if="!isFavorited">Favorite Article</span>
+        <span v-else>Unfavorite Article</span>
+        ({{ favoritesCount }})
+      </span>
+      <span v-else>{{ favoritesCount }}</span>
+    </span>
   </button>
 </template>
 
 <script>
-import {mapActions} from "vuex";
-
 export default {
   name: 'AddToFavorites',
   props: {
@@ -23,32 +28,24 @@ export default {
       type: Boolean,
       required: true,
     },
-    articleSlug: {
-      type: String,
-      required: true,
-    },
     favoritesCount: {
       type: Number,
       required: true,
     },
+    detailed:{
+      type: Boolean,
+      required: true,
+      default: false,
+    }
   },
   data: () => ({
     isFav: this?.isFavorited,
     favCount: this?.favoritesCount,
   }),
   methods: {
-    ...mapActions("addToFavorites", ["addToFavorites"]),
-    handleLike() {
-      this.addToFavorites({slug: this.articleSlug, isFavorited: this.isFav}).then(()=>{
-        if (this.isFav) {
-          this.favCount = this.favCount - 1;
-        } else {
-          this.favCount = this.favCount + 1;
-        }
-        this.isFav = !this.isFav;
-      });
-
-    },
+    handleLike(){
+      this.$emit('addToFavorites');
+    }
   },
 }
 </script>

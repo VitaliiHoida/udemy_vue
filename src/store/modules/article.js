@@ -7,6 +7,7 @@ export default {
         data:null,
         isLoading: false,
         error: null,
+        comments: null,
     },
     getters: {},
     mutations: {
@@ -27,6 +28,25 @@ export default {
         },
         deleteArticleFailure() {
         },
+        getCommentsStart(state) {
+            state.comments = null;
+        },
+        getCommentsSuccess(state, payload) {
+            state.comments = payload;
+        },
+        getCommentsFailure(state) {
+            state.comments = null;
+        },
+        sendCommentsStart() {
+        },
+        sendCommentsSuccess() {
+        },
+        sendCommentsFailure() {
+        },
+        deleteCommentsStart(){},
+        deleteCommentsSuccess(){},
+        deleteCommentsFailure(){},
+
     },
     actions: {
         getArticle(context, {slug}) {
@@ -52,6 +72,32 @@ export default {
                     })
                     .catch(() => {
                         context.commit('deleteArticleFailure');
+                    })
+            });
+        },
+        getComments(context, {slug}) {
+            return new Promise(resolve => {
+                context.commit('getCommentsStart', slug);
+                articleApi.getComments(slug)
+                    .then(comments => {
+                        context.commit('getCommentsSuccess', comments);
+                        resolve(comments);
+                    })
+                    .catch(() => {
+                        context.commit('getCommentsFailure');
+                    })
+            });
+        },
+        deleteComment(context, {slug, id}) {
+            return new Promise(resolve => {
+                context.commit('deleteCommentsStart', slug);
+                articleApi.delComments(slug, id)
+                    .then(() => {
+                        context.commit('deleteCommentsSuccess');
+                        resolve();
+                    })
+                    .catch(() => {
+                        context.commit('deleteCommentsFailure');
                     })
             });
         },
