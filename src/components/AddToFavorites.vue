@@ -34,8 +34,7 @@ export default {
     },
     detailed:{
       type: Boolean,
-      required: true,
-      default: false,
+      required: false,
     }
   },
   data: () => ({

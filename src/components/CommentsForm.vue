@@ -1,5 +1,5 @@
 <template>
-  <p v-if="!user">
+  <p v-if="!curUser">
     <router-link :to="{name: 'login'}">Sign in</router-link>
     or
     <router-link :to="{name: 'register'}">sign up</router-link>
@@ -9,11 +9,11 @@
     <form @submit.prevent="onSubmit" class="card comment-form">
       <div class="card-block">
         <textarea class="form-control" placeholder="Write a comment..."
-                  rows="3" />
+                  rows="3" v-model="body"/>
       </div>
       <div class="card-footer">
         <img class="comment-author-img"
-             :src="user.image">
+             :src="curUser.image">
         <button class="btn btn-sm btn-primary" type="button" @click="handleSend">
           Post Comment
         </button>
@@ -23,18 +23,28 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   name: 'CommentsForm',
   props: {
-    user: {
-      type: Object,
+    slug: {
+      type: String,
       required: true,
     }
   },
+  data: () => ({
+    body: '',
+  }),
+  computed: {
+    ...mapGetters("auth", ["curUser"]),
+  },
   methods:{
+    ...mapActions("article", ["addComment"]),
     handleSend(){
-      this.$emit('addComment');
+      this.addComment({slug: this.slug, comment: {body: this.body}});
+      this.body = '';
     }
-  }
+  },
 }
 </script>

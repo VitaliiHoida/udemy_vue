@@ -1,7 +1,8 @@
 import axios from "@/api/axios";
 
 const getArticle = slug => {
-    return axios.get(`/articles/${slug}`).then(response => response.data.article);
+    return axios.get(`/articles/${slug}`)
+        .then(response => response.data.article);
 }
 
 const deleteArticle = slug => {
@@ -19,11 +20,17 @@ const updateArticle = (slug, articleInput) => {
 }
 
 const getComments = slug => {
-    return axios.get(`/articles/${slug}/comments`).then(response => response.data.comments);
+    return axios.get(`/articles/${slug}/comments`)
+        .then(response => response.data.comments);
 }
 
 const delComments = (slug, commentId) => {
     return axios.delete(`/articles/${slug}/comments/${commentId}`);
+}
+
+const addComment = (slug, comment) => {
+    return axios.post(`/articles/${slug}/comments`, {comment})
+        .then(response => response.data.comments);
 }
 
 export default {
@@ -32,5 +39,6 @@ export default {
     createArticle,
     updateArticle,
     getComments,
-    delComments
+    delComments,
+    addComment
 }

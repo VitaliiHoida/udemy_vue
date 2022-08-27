@@ -24,7 +24,8 @@
           </span>
           <span v-else>
             <follow-button :user="data.author" @follow-user="followUserComp()"/>&nbsp;
-            <add-to-favorites :favorites-count="data.favoritesCount" :is-favorited="data.favorited" @addToFavorites="atf(data)" detailed/>
+            <add-to-favorites :favorites-count="data.favoritesCount" :is-favorited="data.favorited"
+                              @addToFavorites="atf(data)" detailed/>
           </span>
         </div>
       </div>
@@ -64,15 +65,16 @@
             </button>
           </span>
           <span v-else>
-            <follow-button :user="data.author" @follow-user="followUserComp()" />&nbsp;
-            <add-to-favorites :favorites-count="data.favoritesCount" :is-favorited="data.favorited" @addToFavorites="atf(data)" detailed />
+            <follow-button :user="data.author" @follow-user="followUserComp()"/>&nbsp;
+            <add-to-favorites :favorites-count="data.favoritesCount" :is-favorited="data.favorited"
+                              @addToFavorites="atf(data)" detailed/>
           </span>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12 col-md-8 offset-md-2">
-          <comments-form :user="curUser" :add-comment="addCoomentComp"/>
-          <comments-list :user="curUser" :comment-list="comments" @delete-comment="delComment"/>
+          <comments-form :slug="slug"/>
+          <comments-list :slug="slug"/>
         </div>
       </div>
     </div>
@@ -101,7 +103,7 @@ export default {
     CommentsList,
   },
   computed: {
-    ...mapState("article", ["data", "isLoading", "error", "comments"]),
+    ...mapState("article", ["data", "isLoading", "error"]),
     ...mapGetters("auth", ["curUser"]),
     isAuthor() {
       if (!this.curUser || !this.data) {
@@ -114,7 +116,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions("article", ["getArticle", "deleteArticle", "getComments", "deleteComment"]),
+    ...mapActions("article", ["getArticle", "deleteArticle"]),
     ...mapActions("addToFavorites", ["addToFavorites"]),
     ...mapActions("userProfile", ["followUser"]),
 
@@ -123,8 +125,8 @@ export default {
         this.$router.push({name: 'globalFeed'});
       });
     },
-    atf(article){
-      this.addToFavorites({slug: this.slug, isFavorited: article.favorited}).then(()=>{
+    atf(article) {
+      this.addToFavorites({slug: this.slug, isFavorited: article.favorited}).then(() => {
         if (article.favorited) {
           article.favoritesCount = article.favoritesCount - 1;
         } else {
@@ -133,23 +135,15 @@ export default {
         article.favorited = !article.favorited;
       });
     },
-    followUserComp(){
-      console.log(this.data.author.username);
-      this.followUser({slug: this.data.author.username, following: this.data.author.following}).
-      then(() => {
-        this.data.author.following = !this.data.author.following;
-      });
+    followUserComp() {
+      this.followUser({slug: this.data.author.username, following: this.data.author.following})
+          .then(() => {
+            this.data.author.following = !this.data.author.following;
+          });
     },
-    addCoomentComp(){
-      console.log('added');
-    },
-    delComment(data){
-      this.deleteComment({slug: this.slug, id: data});
-    }
   },
   mounted() {
     this.getArticle({slug: this.slug});
-    this.getComments({slug: this.slug});
   },
 }
 </script>

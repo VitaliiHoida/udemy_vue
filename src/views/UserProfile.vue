@@ -97,3 +97,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+ .user-info p {
+   max-width: unset;
+ }
+</style>

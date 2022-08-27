@@ -4,12 +4,11 @@ export default {
     name: 'article',
     namespaced: true,
     state: {
-        data:null,
+        data: null,
         isLoading: false,
         error: null,
         comments: null,
     },
-    getters: {},
     mutations: {
         getArticleStart(state) {
             state.isLoading = true;
@@ -22,31 +21,20 @@ export default {
         getArticleFailure(state) {
             state.isLoading = false;
         },
-        deleteArticleStart() {
-        },
-        deleteArticleSuccess() {
-        },
-        deleteArticleFailure() {
-        },
-        getCommentsStart(state) {
-            state.comments = null;
-        },
+        deleteArticleStart() {},
+        deleteArticleSuccess() {},
+        deleteArticleFailure() {},
+        getCommentsStart() {},
         getCommentsSuccess(state, payload) {
             state.comments = payload;
         },
-        getCommentsFailure(state) {
-            state.comments = null;
-        },
-        sendCommentsStart() {
-        },
-        sendCommentsSuccess() {
-        },
-        sendCommentsFailure() {
-        },
-        deleteCommentsStart(){},
-        deleteCommentsSuccess(){},
-        deleteCommentsFailure(){},
-
+        getCommentsFailure() {},
+        sendCommentsStart() {},
+        sendCommentsSuccess() {},
+        sendCommentsFailure() {},
+        deleteCommentsStart() {},
+        deleteCommentsSuccess() {},
+        deleteCommentsFailure() {},
     },
     actions: {
         getArticle(context, {slug}) {
@@ -85,6 +73,19 @@ export default {
                     })
                     .catch(() => {
                         context.commit('getCommentsFailure');
+                    })
+            });
+        },
+        addComment(context, {slug, comment}) {
+            return new Promise(resolve => {
+                context.commit('sendCommentsStart', slug);
+                articleApi.addComment(slug, comment)
+                    .then((comments) => {
+                        context.commit('sendCommentsSuccess');
+                        resolve(comments);
+                    })
+                    .catch(() => {
+                        context.commit('sendCommentsFailure');
                     })
             });
         },
